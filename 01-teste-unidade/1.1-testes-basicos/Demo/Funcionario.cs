@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Demo
 {
-    public class Pessoa
+    public abstract class Pessoa
     {
         public string Nome { get; protected set; }
         public string Apelido { get; set; }
@@ -13,8 +13,8 @@ namespace Demo
     {
         public Funcionario(string nome, decimal salario)
         {
-            Salario = salario;
             Nome = string.IsNullOrEmpty(nome) ? "Fulano" : nome;
+            DefinirSalario(salario);
         }
         public decimal Salario { get; private set; }
         public IList<string> Habildades { get; set; }
