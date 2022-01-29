@@ -1,6 +1,8 @@
 using System;
+using Bogus;
 using Feature.Customer;
 using Xunit;
+using static Bogus.DataSets.Name;
 
 namespace Tests.Fixtures
 {
@@ -13,12 +15,24 @@ namespace Tests.Fixtures
 		{
         public Customer GenerateValidCustomer()
 				{
-						var customer = new Customer(
-										Guid.NewGuid(),
-										"Guilherme",
-										"Otsu",
-										DateTime.Now.AddYears(-23),
-										DateTime.Now);
+						var gender = new Faker().PickRandom<Gender>();
+
+						var customer = new Faker<Customer>("pt_BR")
+								.CustomInstantiator(c => new Customer(
+														Guid.NewGuid(),
+														c.Name.FirstName(gender),
+														c.Name.LastName(gender),
+														c.Date.Past(80, DateTime.Now.AddYears(-18)),
+														string.Empty,
+														DateTime.Now))
+								.RuleFor(f => f.Email, (f, c) => f.Internet.Email(c.FirstName, c.LastName));
+
+						/* var customer = new Customer( */
+						/* 				Guid.NewGuid(), */
+						/* 				"Guilherme", */
+						/* 				"Otsu", */
+						/* 				DateTime.Now.AddYears(-23), */
+						/* 				DateTime.Now); */
 
 						return customer;
 				}
@@ -30,6 +44,7 @@ namespace Tests.Fixtures
 										"",
 										"",
 										DateTime.Now.AddYears(-17),
+										string.Empty,
 										DateTime.Now);
 
 						return customer;
