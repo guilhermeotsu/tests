@@ -1,3 +1,4 @@
+using System.Linq;
 using Tests.Fixtures;
 using Xunit;
 
@@ -16,7 +17,8 @@ namespace Tests.Traits
 				[Fact]
 				public void Customer_NewCustomer_MustBeValid()
 				{
-						var customer = _customerTestFixture.GenerateValidCustomer();
+						var customer = _customerTestFixture.GenerateValidCustomer()
+								.FirstOrDefault();
 
 						// Act
 						var res = customer.IsValid();

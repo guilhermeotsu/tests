@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Bogus;
 using Feature.Customer;
 using Xunit;
@@ -13,39 +14,38 @@ namespace Tests.Fixtures
 		// Compartilhamento de uma unica instancia entre os testes de uma classe
 		public class CustomerTestFixture : IDisposable
 		{
-        public Customer GenerateValidCustomer()
+        public IEnumerable<Customer> GenerateValidCustomer()
 				{
 						var gender = new Faker().PickRandom<Gender>();
 
-						var customer = new Faker<Customer>("pt_BR")
+						var customers = new Faker<Customer>("pt_BR")
 								.CustomInstantiator(c => new Customer(
 														Guid.NewGuid(),
 														c.Name.FirstName(gender),
 														c.Name.LastName(gender),
 														c.Date.Past(80, DateTime.Now.AddYears(-18)),
 														string.Empty,
+														true,
 														DateTime.Now))
 								.RuleFor(f => f.Email, (f, c) => f.Internet.Email(c.FirstName, c.LastName));
 
-						/* var customer = new Customer( */
-						/* 				Guid.NewGuid(), */
-						/* 				"Guilherme", */
-						/* 				"Otsu", */
-						/* 				DateTime.Now.AddYears(-23), */
-						/* 				DateTime.Now); */
-
-						return customer;
+						return customers.Generate(10);
 				}
 
 				public Customer GenerateInvalidCustomer()
 				{
-						var customer = new Customer(
-										Guid.NewGuid(),
-										"",
-										"",
-										DateTime.Now.AddYears(-17),
-										string.Empty,
-										DateTime.Now);
+						var gender = new Faker().PickRandom<Gender>();
+
+						var customer = new Faker<Customer>("pt_BR")
+								.CustomInstantiator(c => new Customer(
+														Guid.NewGuid(),
+														string.Empty,
+														string.Empty,
+														c.Date.Past(80, DateTime.Now.AddYears(-10)),
+														string.Empty,
+														false,
+														DateTime.Now))
+								.RuleFor(f => f.Email, (f, c) => f.Internet.Email(c.FirstName, c.LastName));
 
 						return customer;
 				}
