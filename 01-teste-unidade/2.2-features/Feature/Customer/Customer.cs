@@ -21,6 +21,7 @@ namespace Feature.Customer
 								string lastName,
 								DateTime birthDate,
 								string email,
+								bool active,
 								DateTime registerDate)
 				{
 						Id = id;
@@ -29,6 +30,7 @@ namespace Feature.Customer
 						BirthDate = birthDate;
 						RegisterDate = registerDate;
 						Email = email;
+						Active = active;
 				}
 
 				public string FullName()
