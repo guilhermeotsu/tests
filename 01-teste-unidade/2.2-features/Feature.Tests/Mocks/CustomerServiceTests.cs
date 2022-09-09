@@ -8,89 +8,89 @@ using Xunit;
 
 namespace Tests.Mocks
 {
-		[Collection(nameof(CustomerCollection))]
-		public class CustomerServiceTests
-		{
-				private CustomerTestFixture _customerTestFixtures;
+    [Collection(nameof(CustomerCollection))]
+    public class CustomerServiceTests
+    {
+        private CustomerTestFixture _customerTestFixtures;
 
-				public CustomerServiceTests(
-								CustomerTestFixture customerTestFixture)
-				{
-						_customerTestFixtures = customerTestFixture;
-				}
+        public CustomerServiceTests(
+                CustomerTestFixture customerTestFixture)
+        {
+            _customerTestFixtures = customerTestFixture;
+        }
 
-				[Fact(DisplayName = "Add Customer must be valid")]
-				public void CustomerService_Add_MustBeValid()
-				{
-						// Arrange
-						var customer = _customerTestFixtures
-								.GenerateValidCustomer().FirstOrDefault();
+        [Fact(DisplayName = "Add Customer must be valid")]
+        public void CustomerService_Add_MustBeValid()
+        {
+            // Arrange
+            var customer = _customerTestFixtures
+                .GenerateValidCustomer().FirstOrDefault();
 
-						var mockCustomerRepository = new Mock<ICustomerRepository>();
-						var mockMediator = new Mock<IMediator>();
-						var customerService = new CustomerService(
-										mockCustomerRepository.Object, 
-										mockMediator.Object);
+            var mockCustomerRepository = new Mock<ICustomerRepository>();
+            var mockMediator = new Mock<IMediator>();
+            var customerService = new CustomerService(
+                    mockCustomerRepository.Object, 
+                    mockMediator.Object);
 
-						// Act
-						customerService.Add(customer);
+            // Act
+            customerService.Add(customer);
 
-						// Assert
-						Assert.True(customer.IsValid());
+            // Assert
+            Assert.True(customer.IsValid());
 
-						// Verificando se o repositorio foi chamado uma vez
-						mockCustomerRepository.Verify(r => r.Add(customer), Times.Once);
-						/* mockMediator.Verify(m => */ 
-						/* 				m.Publish( */
-						/* 						It.IsAny<INotification>(), CancellationToken.None), */
-						/* 				Times.Once); */
-				}
+            // Verificando se o repositorio foi chamado uma vez
+            mockCustomerRepository.Verify(r => r.Add(customer), Times.Once);
+            /* mockMediator.Verify(m => */ 
+            /* 				m.Publish( */
+            /* 						It.IsAny<INotification>(), CancellationToken.None), */
+            /* 				Times.Once); */
+        }
 
-				[Fact(DisplayName = "Add Customer must be invalid")]
-				public void CustomerService_Add_MustBeInValid()
-				{
-						// Arrange
-						var customer = _customerTestFixtures
-								.GenerateInvalidCustomer();
+        [Fact(DisplayName = "Add Customer must be invalid")]
+        public void CustomerService_Add_MustBeInValid()
+        {
+            // Arrange
+            var customer = _customerTestFixtures
+                .GenerateInvalidCustomer();
 
-						var mockCustomerRepository = new Mock<ICustomerRepository>();
-						var mockMediator = new Mock<IMediator>();
-						var customerService = new CustomerService(
-										mockCustomerRepository.Object, 
-										mockMediator.Object);
+            var mockCustomerRepository = new Mock<ICustomerRepository>();
+            var mockMediator = new Mock<IMediator>();
+            var customerService = new CustomerService(
+                    mockCustomerRepository.Object, 
+                    mockMediator.Object);
 
-						// Act
-						customerService.Add(customer);
+            // Act
+            customerService.Add(customer);
 
-						// Assert
-						Assert.False(customer.IsValid());
+            // Assert
+            Assert.False(customer.IsValid());
 
-						// Verificando se o repositorio foi chamado uma vez
-						mockCustomerRepository.Verify(r => r.Add(customer), Times.Never);
-						mockMediator.Verify(m => 
-										m.Publish(
-												It.IsAny<INotification>(), CancellationToken.None),
-										Times.Never);
-				}
+            // Verificando se o repositorio foi chamado uma vez
+            mockCustomerRepository.Verify(r => r.Add(customer), Times.Never);
+            mockMediator.Verify(m => 
+                    m.Publish(
+                        It.IsAny<INotification>(), CancellationToken.None),
+                    Times.Never);
+        }
 
-				[Fact(DisplayName = "Get Customer valid")]
-				public void CustomerService()
-				{
-						var mockCustomerRepository = new Mock<ICustomerRepository>();
-						var mockMediator = new Mock<IMediator>();
+        [Fact(DisplayName = "Get Customer valid")]
+        public void CustomerService()
+        {
+            var mockCustomerRepository = new Mock<ICustomerRepository>();
+            var mockMediator = new Mock<IMediator>();
 
-						// Quando chamar algo retorna isso
-						mockCustomerRepository.Setup(m => m.GetAll())
-								.Returns(_customerTestFixtures.GenerateValidCustomer());
+            // Quando chamar algo retorna isso
+            mockCustomerRepository.Setup(m => m.GetAll())
+                .Returns(_customerTestFixtures.GenerateValidCustomer());
 
-						var customerService = new CustomerService(
-										mockCustomerRepository.Object, 
-										mockMediator.Object);
+            var customerService = new CustomerService(
+                    mockCustomerRepository.Object, 
+                    mockMediator.Object);
 
-						var customers = customerService.GetAllActive();
+            var customers = customerService.GetAllActive();
 
-						Assert.True(customers.Any());
-						Assert.False(customers.Any(c => !c.Active));
-				}
-		}
+            Assert.True(customers.Any());
+            Assert.False(customers.Any(c => !c.Active));
+        }
+    }
 }

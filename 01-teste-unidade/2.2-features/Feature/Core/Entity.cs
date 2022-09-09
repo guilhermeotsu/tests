@@ -3,31 +3,31 @@ using FluentValidation.Results;
 
 namespace Feature.Core
 {
-		public abstract class Entity
-		{
-				public Guid Id { get; protected set; }
-				public ValidationResult ValidationResult { get; protected set; }
+    public abstract class Entity
+    {
+        public Guid Id { get; protected set; }
+        public ValidationResult ValidationResult { get; protected set; }
 
-				public virtual bool IsValid()
-				{
-						throw new NotImplementedException();
-				}
+        public virtual bool IsValid()
+        {
+            throw new NotImplementedException();
+        }
 
         public override bool Equals(object obj)
         {
-						var compareTo = obj as Entity;
+            var compareTo = obj as Entity;
 
-						if(ReferenceEquals(this, compareTo)) return true;
-						if(ReferenceEquals(null, compareTo)) return false;
+            if(ReferenceEquals(this, compareTo)) return true;
+            if(ReferenceEquals(null, compareTo)) return false;
 
-						return Id.Equals(compareTo.Id);
+            return Id.Equals(compareTo.Id);
         }
 
         public override int GetHashCode()
-						=> (GetType().GetHashCode() * 907 + Id.GetHashCode());
+            => (GetType().GetHashCode() * 907 + Id.GetHashCode());
 
         public override string ToString()
-						=> GetType().Name + " [Id= " + Id + "]";
-		}
+            => GetType().Name + " [Id= " + Id + "]";
+    }
 }
 
